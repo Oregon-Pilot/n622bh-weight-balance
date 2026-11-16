@@ -45,7 +45,7 @@ const $=id=>document.getElementById(id);
 function number(id){const v=Number($(id).value);return Number.isFinite(v)?v:0}
 function calc(){
  const pilot=number('pilot'),passenger=number('passenger'),bag=number('baggage'),fuel=number('fuel'),landingFuel=number('landingFuel');
- const valid=[pilot,passenger,bag,fuel,landingFuel].every(v=>v>=0)&&fuel<=36&&landingFuel<=36;
+ const valid=[pilot,passenger,bag,fuel,landingFuel].every(v=>v>=0)&&fuel<=36&&landingFuel<=36&&landingFuel<=fuel;
  const baseW=1200,baseM=94731.44;
  function result(gal){const fw=gal*6;const w=baseW+pilot+passenger+bag+fw;const m=baseM+(pilot+passenger)*98.9+bag*123+fw*76.75;return {w,cg:m/w};}
  function show(prefix,r,gal){
@@ -53,7 +53,7 @@ function calc(){
   const issues=[];if(r.w>1800)issues.push('OVER 1,800 lb maximum gross weight');if(r.cg<77.95||r.cg>84.84)issues.push('CG OUTSIDE 77.95–84.84 in limits');if(bag>75)issues.push('Baggage exceeds 75 lb POH limit');if(gal>36||gal<0)issues.push('Fuel quantity outside 0–36 gal');
   const el=$(prefix+'Status');el.className='status '+(issues.length?'bad':'ok');el.textContent=issues.length?'NOT WITHIN ENTERED LIMITS: '+issues.join(' · '):'Within the entered weight, baggage, and CG limits. Verify against current aircraft records.';
  }
- if(!valid){$('toStatus').className='status bad';$('toStatus').textContent='Check inputs: weights and fuel must be non-negative; fuel must not exceed 36 gallons.';return;}
+ if(!valid){$('toStatus').className='status bad';$('toStatus').textContent='Check inputs: weights and fuel must be non-negative, fuel must not exceed 36 gallons, and landing fuel cannot exceed takeoff fuel.';return;}
  show('to',result(fuel),fuel);show('ld',result(landingFuel),landingFuel);
  localStorage.setItem('n622bh-wb',JSON.stringify({pilot,passenger,bag,fuel,landingFuel}));
 }
