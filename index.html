@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10243a">
+<title>N622BH Weight & Balance</title>
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<style>
+:root{color-scheme:dark;--bg:#0b1725;--panel:#14263a;--panel2:#1b3149;--ink:#f4f7fb;--muted:#a9bacb;--line:#30485f;--blue:#67b7ff;--green:#51d49a;--red:#ff7777;--amber:#ffd166}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#10243a,#08111c 70%);color:var(--ink);font:16px system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+main{max-width:760px;margin:auto;padding:20px 15px 36px}.top{display:flex;align-items:center;gap:13px;margin:8px 0 18px}.plane{font-size:34px}.eyebrow{color:var(--blue);font-size:12px;font-weight:800;letter-spacing:.13em;text-transform:uppercase}h1{font-size:25px;margin:2px 0 0}h2{font-size:17px;margin:0 0 14px}.sub{color:var(--muted);font-size:13px;margin-top:3px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:17px;margin:13px 0;box-shadow:0 8px 24px #0002}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field label{display:block;color:var(--muted);font-size:13px;margin:0 0 6px}.field input{width:100%;min-width:0;border:1px solid #405a73;border-radius:10px;background:#091827;color:var(--ink);font-size:18px;padding:12px}.unit{font-size:11px;color:var(--muted);margin-top:4px}.result{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{background:var(--panel2);border-radius:12px;padding:13px}.metric span{display:block;color:var(--muted);font-size:12px}.metric strong{display:block;font-size:25px;margin-top:4px;font-variant-numeric:tabular-nums}.status{border-radius:11px;padding:12px;margin-top:12px;font-weight:700}.ok{background:#103a31;color:#9df0c8}.bad{background:#481f29;color:#ffc1c1}.warn{background:#473719;color:#ffe0a0}.muted{color:var(--muted);font-size:12px;line-height:1.5}.btn{width:100%;border:0;border-radius:12px;padding:14px;background:var(--blue);color:#061625;font-weight:800;font-size:16px;margin-top:12px}.secondary{background:#263e56;color:var(--ink)}.rowline{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--line);font-size:14px}.rowline:last-child{border:0}.hidden{display:none}.smallhead{color:var(--blue);font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 12px}.notice{border-left:3px solid var(--amber);padding:10px 12px;background:#352c1c;border-radius:6px;color:#ffe5ae;font-size:12px;line-height:1.5}
+@media(max-width:390px){.grid{gap:9px}.field input{font-size:17px;padding:10px}.card{padding:14px}}
+</style>
+</head>
+<body><main>
+<header class="top"><div class="plane">✈</div><div><div class="eyebrow">Aircraft loading calculator</div><h1>N622BH Weight & Balance</h1><div class="sub">Van's RV-9A · Aircraft-specific data from POH</div></div></header>
+<section class="card">
+<div class="smallhead">Load inputs</div>
+<div class="grid">
+<div class="field"><label for="pilot">Pilot weight</label><input id="pilot" type="number" min="0" step=".1" value="190"><div class="unit">lb</div></div>
+<div class="field"><label for="passenger">Front passenger</label><input id="passenger" type="number" min="0" step=".1" value="0"><div class="unit">lb</div></div>
+<div class="field"><label for="baggage">Aft baggage</label><input id="baggage" type="number" min="0" step=".1" value="0"><div class="unit">lb · POH max 75 lb</div></div>
+<div class="field"><label for="fuel">Fuel at takeoff</label><input id="fuel" type="number" min="0" max="36" step=".1" value="30"><div class="unit">US gallons · 36 gal total</div></div>
+<div class="field"><label for="landingFuel">Fuel expected at landing</label><input id="landingFuel" type="number" min="0" max="36" step=".1" value="8"><div class="unit">US gallons remaining</div></div>
+</div>
+<button class="btn" id="calc">Calculate weight & CG</button>
+</section>
+<section class="card" id="takeoffCard">
+<h2>Takeoff loading</h2><div class="result"><div class="metric"><span>Total weight</span><strong id="toWeight">—</strong></div><div class="metric"><span>Center of gravity</span><strong id="toCg">—</strong></div></div><div id="toStatus" class="status warn">Enter loading and calculate.</div>
+</section>
+<section class="card" id="landingCard">
+<h2>Landing loading</h2><div class="result"><div class="metric"><span>Landing weight</span><strong id="ldWeight">—</strong></div><div class="metric"><span>Center of gravity</span><strong id="ldCg">—</strong></div></div><div id="ldStatus" class="status warn">Enter expected landing fuel and calculate.</div>
+</section>
+<section class="card"><h2>Aircraft data used</h2>
+<div class="rowline"><span>Empty weight</span><b>1,200 lb</b></div><div class="rowline"><span>Empty moment</span><b>94,731.44 lb-in</b></div><div class="rowline"><span>Fuel arm / density</span><b>76.75 in / 6 lb/gal</b></div><div class="rowline"><span>Pilot & passenger arm</span><b>98.90 in</b></div><div class="rowline"><span>Aft baggage arm</span><b>123.00 in</b></div><div class="rowline"><span>CG range</span><b>77.95–84.84 in</b></div><div class="rowline"><span>Maximum gross weight</span><b>1,800 lb</b></div><div class="rowline"><span>Maximum baggage</span><b>75 lb</b></div>
+<p class="muted">Source: N622BH POH, Weight & Balance section and sample loading worksheet. Empty moment is calculated from the POH wheel weights and arms.</p></section>
+<section class="card"><h2>Important operating notes</h2><div class="notice">This calculator is an aid, not a substitute for the current aircraft weight-and-balance records, loading graph, placards, or pilot judgment. Verify all inputs and results against the current aircraft documents before every flight. The POH warns that CG can move aft as fuel is burned; check landing CG as well as takeoff CG. The POH also states that the baggage compartment must not be used in the utility category.</div><p class="muted">The app checks the stated 1,800 lb gross weight, 75 lb baggage limit, and 77.95–84.84 in CG range. It does not model any additional loading-envelope curves or category-specific limitations.</p></section>
+<footer class="muted" style="text-align:center;padding:8px">N622BH · Works offline after first load · Values stored only on this device</footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+function number(id){const v=Number($(id).value);return Number.isFinite(v)?v:0}
+function calc(){
+ const pilot=number('pilot'),passenger=number('passenger'),bag=number('baggage'),fuel=number('fuel'),landingFuel=number('landingFuel');
+ const valid=[pilot,passenger,bag,fuel,landingFuel].every(v=>v>=0)&&fuel<=36&&landingFuel<=36;
+ const baseW=1200,baseM=94731.44;
+ function result(gal){const fw=gal*6;const w=baseW+pilot+passenger+bag+fw;const m=baseM+(pilot+passenger)*98.9+bag*123+fw*76.75;return {w,cg:m/w};}
+ function show(prefix,r,gal){
+  $(prefix+'Weight').textContent=r.w.toFixed(1)+' lb';$(prefix+'Cg').textContent=r.cg.toFixed(2)+' in';
+  const issues=[];if(r.w>1800)issues.push('OVER 1,800 lb maximum gross weight');if(r.cg<77.95||r.cg>84.84)issues.push('CG OUTSIDE 77.95–84.84 in limits');if(bag>75)issues.push('Baggage exceeds 75 lb POH limit');if(gal>36||gal<0)issues.push('Fuel quantity outside 0–36 gal');
+  const el=$(prefix+'Status');el.className='status '+(issues.length?'bad':'ok');el.textContent=issues.length?'NOT WITHIN ENTERED LIMITS: '+issues.join(' · '):'Within the entered weight, baggage, and CG limits. Verify against current aircraft records.';
+ }
+ if(!valid){$('toStatus').className='status bad';$('toStatus').textContent='Check inputs: weights and fuel must be non-negative; fuel must not exceed 36 gallons.';return;}
+ show('to',result(fuel),fuel);show('ld',result(landingFuel),landingFuel);
+ localStorage.setItem('n622bh-wb',JSON.stringify({pilot,passenger,bag,fuel,landingFuel}));
+}
+$('calc').addEventListener('click',calc);
+try{const saved=JSON.parse(localStorage.getItem('n622bh-wb')||'null');if(saved)for(const [k,v] of Object.entries(saved))if($(k))$(k).value=v;}catch(e){}
+calc();
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+</script></body></html>
